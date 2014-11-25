@@ -19,16 +19,16 @@ app.post '/unsub', (req, res)->
   console.log  report
 
   if report.delivered?
-    return 200
+    res.status(200).end()
 
   email   = report.mail.destination[0]
   if email?
     connection.query 'UPDATE users set valid_email = false where email = ?',[email], (err,res)->
       if (err)
         console.error "tried and failed to unsubscribe #{email}"
-        return 404
+        res.status(404).end()
       else
-        return 200
+        res.status(200).end()
 
 
 server = app.listen process.env.port
