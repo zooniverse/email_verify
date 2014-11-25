@@ -1,0 +1,14 @@
+{
+  "name": "zooniverse_email_check",
+  "description": "Unsubscribes emails that bounce from SES",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x",
+    "mysql": "*",
+    "coffee-script": "*"
+  },
+  "scripts":{
+    "start": "coffee server.coffee"
+  }
+}
