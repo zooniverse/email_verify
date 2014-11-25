@@ -31,4 +31,4 @@ app.post '/unsub', (req, res)->
         res.status(200).end()
 
 
-server = app.listen process.env.port
+server = app.listen(process.env.PORT || 3000)
