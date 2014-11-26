@@ -18,9 +18,14 @@ connection.connect (err)->
 
 app = express()
 app.use(express.bodyParser())
+app.enable('trust proxy')
+
+app.get '/', (req, res)->
+  res.status(200).end()
 
 app.post '/unsub', (req, res)->
   report  = req.body
+  console.log req.ips
   console.log  report
 
   if report.delivered?
