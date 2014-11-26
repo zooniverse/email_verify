@@ -1,18 +1,23 @@
 express = require('express')
 mysql      = require('mysql')
+yaml       = require('js-yaml')
+fs         = require('fs')
+
+db_config = yaml.safeLoad(fs.readFileSync('/app/database.yml', 'utf8'))
 
 connection = mysql.createConnection
-  host:     process.env["ZOONIVERSE_HOME_DB"]
-  user:     process.env["ZOONIVERSE_HOME_USER"]
-  password: process.env["ZOONIVERSE_HOME_PASSWORD"]
-  database: "zoonvierse_home"
+  host:     db_config['production']['host']
+  user:     db_config['production']['username']
+  password: db_config['production']['password']
+  database: db_config['production']['database']
 
 connection.connect (err)->
   if err
-    console.error("count not connect to zoonivers home")
+    console.error("Could not connect to Zooniverse Home database")
     console.error err.stack
 
 app = express()
+app.use(express.bodyParser())
 
 app.post '/unsub', (req, res)->
   report  = req.body
@@ -23,11 +28,12 @@ app.post '/unsub', (req, res)->
 
   email   = report.mail.destination[0]
   if email?
-    connection.query 'UPDATE users set valid_email = false where email = ?',[email], (err,res)->
+    connection.query 'UPDATE users set valid_email = false where email = ?',[email], (err,result)->
       if (err)
         console.error "tried and failed to unsubscribe #{email}"
-        res.status(404).end()
+        res.status(500).end()
       else
+        console.log "Unsubscribed #{email}"
         res.status(200).end()
 
 
