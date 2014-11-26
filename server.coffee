@@ -2,6 +2,7 @@ express = require('express')
 mysql      = require('mysql')
 yaml       = require('js-yaml')
 fs         = require('fs')
+bodyParser = require('body-parser')
 
 db_config = yaml.safeLoad(fs.readFileSync('/app/database.yml', 'utf8'))
 
@@ -17,7 +18,7 @@ connection.connect (err)->
     console.error err.stack
 
 app = express()
-app.use(express.bodyParser())
+app.use(bodyParser.json({ type: 'text' }))
 app.enable('trust proxy')
 
 app.get '/', (req, res)->
