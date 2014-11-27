@@ -25,7 +25,7 @@ app.get '/', (req, res)->
   res.status(200).end()
 
 app.post '/unsub', (req, res)->
-  report  = req.body
+  report  = JSON.parse(req.body['Message'])
   console.log req.ips
   console.log  report
 
@@ -34,13 +34,17 @@ app.post '/unsub', (req, res)->
 
   email   = report.mail.destination[0]
   if email?
-    connection.query 'UPDATE users set valid_email = false where email = ?',[email], (err,result)->
-      if (err)
-        console.error "tried and failed to unsubscribe #{email}"
-        res.status(500).end()
-      else
-        console.log "Unsubscribed #{email}"
-        res.status(200).end()
+    if report['bounce']['bounceType'] == 'Permanent'
+      connection.query 'UPDATE users set valid_email = false where email = ?',[email], (err,result)->
+        if (err)
+          console.error "tried and failed to unsubscribe #{email}"
+          res.status(500).end()
+        else
+          console.log "Unsubscribed #{email}"
+          res.status(200).end()
+    else
+      console.log "Ignoring non-permanent bounce"
+      res.status(200).end()
 
 
 server = app.listen(process.env.PORT || 3000)
