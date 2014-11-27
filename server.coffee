@@ -4,6 +4,8 @@ yaml       = require('js-yaml')
 fs         = require('fs')
 bodyParser = require('body-parser')
 
+require('console-stamp')(console, '[yyyy-mm-dd HH:MM:ss.l Z]')
+
 db_config = yaml.safeLoad(fs.readFileSync('/app/database.yml', 'utf8'))
 
 connection = mysql.createConnection
@@ -26,8 +28,6 @@ app.get '/', (req, res)->
 
 app.post '/unsub', (req, res)->
   report  = JSON.parse(req.body['Message'])
-  console.log req.ips
-  console.log  report
 
   if report.delivered?
     res.status(200).end()
@@ -35,15 +35,15 @@ app.post '/unsub', (req, res)->
   email   = report.mail.destination[0]
   if email?
     if report['bounce']['bounceType'] == 'Permanent'
-      connection.query 'UPDATE users set valid_email = false where email = ?',[email], (err,result)->
+      connection.query 'UPDATE users SET valid_email = false WHERE email = ?',[email], (err,result)->
         if (err)
-          console.error "tried and failed to unsubscribe #{email}"
+          console.error "Tried and failed to unsubscribe #{email}"
           res.status(500).end()
         else
           console.log "Unsubscribed #{email}"
           res.status(200).end()
     else
-      console.log "Ignoring non-permanent bounce"
+      console.log "Ignoring non-permanent bounce for #{email}"
       res.status(200).end()
 
 

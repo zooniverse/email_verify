@@ -8,7 +8,8 @@
     "mysql": "*",
     "coffee-script": "*",
     "js-yaml": "*",
-    "body-parser": "*"
+    "body-parser": "*",
+    "console-stamp": "*"
   },
   "scripts":{
     "start": "coffee server.coffee"
