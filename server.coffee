@@ -34,7 +34,7 @@ app.post '/unsub', (req, res)->
 
   email   = report.mail.destination[0]
   if email?
-    if report['bounce']['bounceType'] == 'Permanent'
+    if report['notificationType'] == 'Complaint' or report['bounce']['bounceType'] == 'Permanent'
       connection.query 'UPDATE users SET valid_email = false WHERE email = ?',[email], (err,result)->
         if (err)
           console.error "Tried and failed to unsubscribe #{email}"
