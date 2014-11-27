@@ -40,7 +40,7 @@ app.post '/unsub', (req, res)->
           console.error "Tried and failed to unsubscribe #{email}"
           res.status(500).end()
         else
-          console.log "Unsubscribed #{email}"
+          console.log "Unsubscribed #{email} (#{report['notificationType']})"
           res.status(200).end()
     else
       console.log "Ignoring non-permanent bounce for #{email}"
