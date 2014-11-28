@@ -3,6 +3,10 @@ mysql      = require('mysql')
 yaml       = require('js-yaml')
 fs         = require('fs')
 bodyParser = require('body-parser')
+winston    = require('winston')
+
+winston.add(winston.transports.File, { filename: '/app/log/ses_json.log' })
+winston.remove(winston.transports.Console)
 
 require('console-stamp')(console, '[yyyy-mm-dd HH:MM:ss.l Z]')
 
@@ -28,6 +32,7 @@ app.get '/', (req, res)->
 
 app.post '/unsub', (req, res)->
   report  = JSON.parse(req.body['Message'])
+  winston.info(report)
 
   if report.delivered?
     res.status(200).end()
