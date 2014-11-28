@@ -2,7 +2,7 @@ express = require('express')
 mysql      = require('mysql')
 yaml       = require('js-yaml')
 fs         = require('fs')
-bodyParser = require('body-parser')
+SNSClient  = require('aws-snsclient')
 winston    = require('winston')
 
 winston.add(winston.transports.File, { filename: '/app/log/ses_json.log' })
@@ -11,6 +11,7 @@ winston.remove(winston.transports.Console)
 require('console-stamp')(console, '[yyyy-mm-dd HH:MM:ss.l Z]')
 
 db_config = yaml.safeLoad(fs.readFileSync('/app/database.yml', 'utf8'))
+auth = yaml.safeLoad(fs.readFileSync('/app/auth.yml', 'utf8'))
 
 connection = mysql.createConnection
   host:     db_config['production']['host']
@@ -23,19 +24,9 @@ connection.connect (err)->
     console.error("Could not connect to Zooniverse Home database")
     console.error err.stack
 
-app = express()
-app.use(bodyParser.json({ type: 'text' }))
-app.enable('trust proxy')
-
-app.get '/', (req, res)->
-  res.status(200).end()
-
-app.post '/unsub', (req, res)->
-  report  = JSON.parse(req.body['Message'])
+sns_client = SNSClient auth, (err, message)->
+  report  = JSON.parse(message.Message)
   winston.info(report)
-
-  if report.delivered?
-    res.status(200).end()
 
   email   = report.mail.destination[0]
   if email?
@@ -43,13 +34,16 @@ app.post '/unsub', (req, res)->
       connection.query 'UPDATE users SET valid_email = false WHERE email = ?',[email], (err,result)->
         if (err)
           console.error "Tried and failed to unsubscribe #{email}"
-          res.status(500).end()
         else
           console.log "Unsubscribed #{email} (#{report['notificationType']})"
-          res.status(200).end()
     else
       console.log "Ignoring non-permanent bounce for #{email}"
-      res.status(200).end()
 
+app = express()
+
+app.get '/', (req, res)->
+  res.status(200).end()
+
+app.post '/unsub', sns_client
 
 server = app.listen(process.env.PORT || 3000)

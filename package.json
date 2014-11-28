@@ -8,9 +8,9 @@
     "mysql": "*",
     "coffee-script": "*",
     "js-yaml": "*",
-    "body-parser": "*",
     "console-stamp": "*",
-    "winston": "*"
+    "winston": "*",
+    "aws-snsclient": "*"
   },
   "scripts":{
     "start": "coffee server.coffee"
