@@ -1,4 +1,3 @@
-
 FROM ubuntu:14.04
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -15,5 +14,7 @@ RUN apt-get update && apt-get -y upgrade && \
     npm install
 
 ADD ./ /app/
+
+EXPOSE 80
 
 ENTRYPOINT [ "./start.sh" ]
