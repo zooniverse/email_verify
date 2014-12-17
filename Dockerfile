@@ -7,14 +7,15 @@ ADD package.json /app/
 WORKDIR /app
 
 RUN apt-get update && apt-get -y upgrade && \
-    apt-get install -y curl && \
+    apt-get install -y curl supervisor && \
     curl https://deb.nodesource.com/setup | bash - && \
     apt-get install -y nodejs build-essential automake  autoconf && \
     apt-get clean && \
     npm install
 
 ADD ./ /app/
+ADD ./supervisor.conf /etc/supervisor/conf.d/email_verify.conf
 
 EXPOSE 80
 
-ENTRYPOINT [ "./start.sh" ]
+ENTRYPOINT [ "/usr/bin/supervisord" ]
