@@ -39,6 +39,8 @@ sns_client = SNSClient auth, (err, message)->
         else
           console.log "Ignoring non-permanent bounce for #{email}"
 
+    connection.release()
+
 app = express()
 
 app.get '/', (req, res)->
