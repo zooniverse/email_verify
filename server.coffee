@@ -29,7 +29,7 @@ sns_client = SNSClient auth, (err, message)->
       winston.info(report)
 
       email   = report.mail.destination[0]
-      email   = if email.indexOf("<") then email.match(/<(.+)>/)[1] else email
+      email   = if email.indexOf("<") > -1 then email.match(/<(.+)>/)[1] else email
       if email?
         if report['notificationType'] == 'Complaint' or report['bounce']['bounceType'] == 'Permanent'
           connection.query 'UPDATE users SET valid_email = false WHERE email = ?',[email], (err,result)->
