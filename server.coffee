@@ -29,6 +29,7 @@ sns_client = SNSClient auth, (err, message)->
           client.query 'UPDATE users SET valid_email = false WHERE email = ?',[email], (err,result)->
             if (err)
               console.error "Tried and failed to unsubscribe #{email}"
+              console.error err.stack
             else
               console.log "Unsubscribed #{email} (#{report['notificationType']}); changed #{result.changedRows} rows"
             done()
