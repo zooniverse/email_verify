@@ -31,7 +31,7 @@ sns_client = SNSClient auth, (err, message)->
               console.error "Tried and failed to unsubscribe #{email}"
               console.error err.stack
             else
-              console.log "Unsubscribed #{email} (#{report['notificationType']}); changed #{result.changedRows} rows"
+              console.log "Unsubscribed #{email} (#{report['notificationType']}); changed #{result.rowCount} rows"
             done()
     else
       console.log "Ignoring non-permanent bounce for #{email}"
