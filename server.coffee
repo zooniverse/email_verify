@@ -26,7 +26,7 @@ sns_client = SNSClient auth, (err, message)->
           console.error("Could not connect to Panoptes database")
           console.error err.stack
         else
-          client.query 'UPDATE users SET valid_email = false WHERE email = ?',[email], (err,result)->
+          client.query 'UPDATE users SET valid_email = false WHERE email = $1',[email], (err,result)->
             if (err)
               console.error "Tried and failed to unsubscribe #{email}"
               console.error err.stack
