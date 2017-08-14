@@ -13,6 +13,13 @@ require('console-stamp')(console, '[yyyy-mm-dd HH:MM:ss.l Z]')
 db_config = yaml.safeLoad(fs.readFileSync('/app/database.yml', 'utf8'))
 auth = yaml.safeLoad(fs.readFileSync('/app/auth.yml', 'utf8'))
 
+pg_pool = pg.Pool({
+    user: db_config['production']['username'],
+    host: db_config['production']['host'],
+    password: db_config['production']['password'],
+    database: db_config['production']['database'],
+})
+
 sns_client = SNSClient auth, (err, message)->
   report  = JSON.parse(message.Message)
   winston.info(report)
@@ -21,7 +28,7 @@ sns_client = SNSClient auth, (err, message)->
   email   = if email.indexOf("<") > -1 then email.match(/<(.+)>/)[1] else email
   if email?
     if report['notificationType'] == 'Complaint' or report['bounce']['bounceType'] == 'Permanent'
-      pg.connect "postgres://#{db_config['production']['username']}:#{db_config['production']['password']}@#{db_config['production']['host']}/#{db_config['production']['database']}", (err, client, done)->
+      pg_pool.connect (err, client, done)->
         if err
           console.error("Could not connect to Panoptes database")
           console.error err.stack
