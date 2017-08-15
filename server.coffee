@@ -18,6 +18,7 @@ pg_pool = pg.Pool({
     host: db_config['production']['host'],
     password: db_config['production']['password'],
     database: db_config['production']['database'],
+    ssl: true,
 })
 
 sns_client = SNSClient auth, (err, message)->
