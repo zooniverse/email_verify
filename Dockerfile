@@ -8,4 +8,7 @@ RUN npm install
 
 COPY . /app/
 
+RUN ln -s /run/secrets/database.yml /app/database.yml
+RUN ln -s /run/secrets/auth.yml /app/auth.yml
+
 CMD [ "npm", "start" ]
