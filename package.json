@@ -5,12 +5,12 @@
   "private": true,
   "dependencies": {
     "express": "3.x",
-    "pg": "*",
-    "coffee-script": "*",
-    "js-yaml": "*",
-    "console-stamp": "*",
-    "winston": "*",
-    "aws-snsclient": "*"
+    "pg": "7.4.x",
+    "coffee-script": "1.12.x",
+    "js-yaml": "3.10.x",
+    "console-stamp": "0.2.x",
+    "winston": "2.4.x",
+    "aws-snsclient": "0.2.x"
   },
   "scripts":{
     "start": "coffee server.coffee"
