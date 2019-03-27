@@ -19,6 +19,9 @@ spec:
           image: zooniverse/email-verify:__IMAGE_TAG__
           ports:
             - containerPort: 80
+          env:
+          - name: PORT
+            value: 80
           volumeMounts:
           - name: email-verify-database
             mountPath: "/app/database.yml"
