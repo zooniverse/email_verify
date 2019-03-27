@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-verify
+  labels:
+    app: email-verify
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: email-verify
+  template:
+    metadata:
+      labels:
+        app: email-verify
+    spec:
+      containers:
+        - name: email-verify-app
+          image: zooniverse/email-verify:__IMAGE_TAG__
+          ports:
+            - containerPort: 80
+          volumeMounts:
+          - name: email-verify-database
+            mountPath: "/app/database.yml"
+            subPath: "database.yml"
+            readOnly: true
+          - name: email-verify-auth
+            mountPath: "/app/auth.yml"
+            subPath: "auth.yml"
+            readOnly: true
+      volumes:
+      - name: email-verify-database
+        secret:
+          secretName: email-verify-database
+      - name: email-verify-auth
+        secret:
+          secretName: email-verify-auth
