@@ -7,7 +7,7 @@
     "express": "3.x",
     "pg": "7.4.x",
     "coffee-script": "1.12.x",
-    "js-yaml": "3.10.x",
+    "js-yaml": "3.13.x",
     "console-stamp": "0.2.x",
     "winston": "2.4.x",
     "aws-snsclient": "0.2.x"
