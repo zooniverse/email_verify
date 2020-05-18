@@ -17,6 +17,13 @@ spec:
       containers:
         - name: email-verify-app
           image: zooniverse/email-verify:__IMAGE_TAG__
+          resources:
+             requests:
+               memory: "70Mi"
+               cpu: "10m"
+             limits:
+               memory: "70Mi"
+               cpu: "500m"
           ports:
             - containerPort: 80
           env:
