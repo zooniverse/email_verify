@@ -28,6 +28,7 @@ sns_client = SNSClient auth, (err, message)->
   email   = report.mail.destination[0]
   email   = if email.indexOf("<") > -1 then email.match(/<(.+)>/)[1] else email
   if email?
+    # https://docs.aws.amazon.com/ses/latest/dg/notification-contents.html#bounce-types
     if report['notificationType'] == 'Complaint' or report['bounce']['bounceType'] == 'Permanent'
       pg_pool.connect (err, client, done)->
         if err
