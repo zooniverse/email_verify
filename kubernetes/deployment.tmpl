@@ -5,7 +5,7 @@ metadata:
   labels:
     app: email-verify
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: email-verify
@@ -23,7 +23,7 @@ spec:
                cpu: "10m"
              limits:
                memory: "200Mi"
-               cpu: "500m"
+               cpu: "1000m"
           ports:
             - containerPort: 80
           env:
