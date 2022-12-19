@@ -1,0 +1,10 @@
+version: '3'
+services:
+  email-verify:
+    build:
+      context: .
+    volumes:
+      - ./:/app
+      - node_modules_cache:/app/node_modules
+volumes:
+  node_modules_cache:
