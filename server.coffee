@@ -6,7 +6,7 @@ SNSClient  = require('aws-snsclient')
 winston    = require('winston')
 
 winston.add(winston.transports.File, { filename: '/app/log/ses_json.log' })
-winston.remove(winston.transports.Console)
+# winston.remove(winston.transports.Console)
 
 require('console-stamp')(console, '[yyyy-mm-dd HH:MM:ss.l Z]')
 
