@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "express": "4.x",
-    "pg": "7.4.x",
+    "pg": "8.8.x",
     "pgpass": "1.0.2",
     "js-yaml": "3.13.x",
     "console-stamp": "0.2.x",
