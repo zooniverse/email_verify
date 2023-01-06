@@ -8,7 +8,7 @@
     "pg": "7.4.x",
     "pgpass": "1.0.2",
     "js-yaml": "3.13.x",
-    "console-stamp": "3.1.x",
+    "console-stamp": "0.2.x",
     "winston": "2.4.x",
     "aws-snsclient": "0.2.x"
   },
