@@ -22,7 +22,7 @@ var pg_pool = pg.Pool({
     ssl: true,
 })
 
-function unsubscribe(err, result, email) {
+function unsubscribe(err, result, email, report) {
   if (err) {
     console.error("Tried and failed to unsubscribe", email);
     console.error(err.stack);
@@ -31,13 +31,13 @@ function unsubscribe(err, result, email) {
   }
 }
 
-function updatePanoptes(err, client, done, email) {
+function updatePanoptes(err, client, done, email, report) {
   if (err) {
     console.error("Could not connect to Panoptes database");
     console.error(err.stack);
   } else {
     client.query('UPDATE users SET valid_email = false WHERE email = $1',[email], function (err,result) {
-      unsubscribe(err, result, email);
+      unsubscribe(err, result, email, report);
       done();
     });
   }
@@ -52,7 +52,7 @@ var sns_client = SNSClient(auth, function (err, message) {
   if (!!email) {
     if (report.notificationType === 'Complaint' || report.bounce.bounceType == 'Permanent') {
       pg_pool.connect(function (err, client, done) {
-        updatePanoptes(err, client, done, email);
+        updatePanoptes(err, client, done, email, report);
       });
     } else {
       console.log("Ignoring non-permanent bounce for", email);
