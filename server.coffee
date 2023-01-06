@@ -29,19 +29,26 @@ sns_client = SNSClient auth, (err, message)->
   email   = if email.indexOf("<") > -1 then email.match(/<(.+)>/)[1] else email
   if email?
     if report['notificationType'] == 'Complaint' or report['bounce']['bounceType'] == 'Permanent'
+      winston.info("Attempting to unsubscribe #{email} (#{report['notificationType']})")
       pg_pool.connect (err, client, done)->
         if err
+          winston.info "Could not connect to Panoptes database"
+          winston.info err.stack
           console.error("Could not connect to Panoptes database")
           console.error err.stack
         else
           client.query 'UPDATE users SET valid_email = false WHERE email = $1',[email], (err,result)->
             if (err)
+              winston.info "Tried and failed to unsubscribe #{email}"
+              winston.info err.stack
               console.error "Tried and failed to unsubscribe #{email}"
               console.error err.stack
             else
+              winston.info "Unsubscribed #{email} (#{report['notificationType']}); changed #{result.rowCount} rows"
               console.log "Unsubscribed #{email} (#{report['notificationType']}); changed #{result.rowCount} rows"
             done()
     else
+      winston.info "Ignoring non-permanent bounce for #{email}"
       console.log "Ignoring non-permanent bounce for #{email}"
 
 app = express()
