@@ -5,16 +5,16 @@ var fs         = require('fs');
 var SNSClient  = require('aws-snsclient');
 var winston    = require('winston');
 
-winston.add(winston.transports.File, { filename: '/app/log/ses_json.log' });
-winston.remove(winston.transports.Console);
+const logFile = new winston.transports.File({ filename: './log/ses_json.log' });
+winston.add(logFile);
 
 require('console-stamp')(console, '[yyyy-mm-dd HH:MM:ss.l Z]');
 
-var db_config = yaml.safeLoad(fs.readFileSync('/app/database.yml', 'utf8'));
-var auth = yaml.safeLoad(fs.readFileSync('/app/auth.yml', 'utf8'));
+var db_config = yaml.load(fs.readFileSync('./database.yml', 'utf8'));
+var auth = yaml.load(fs.readFileSync('./auth.yml', 'utf8'));
 var production_config = db_config.production;
 
-var pg_pool = pg.Pool({
+var pg_pool = new pg.Pool({
     user: production_config.username,
     host: production_config.host,
     password: production_config.password,
@@ -36,7 +36,7 @@ function updatePanoptes(err, client, done, email, report) {
     console.error("Could not connect to Panoptes database");
     console.error(err.stack);
   } else {
-    client.query('UPDATE users SET valid_email = false WHERE email = $1',[email], function (err,result) {
+    client.query('UPDATE users SET valid_email = false WHERE email = $1',[email], function (err, result) {
       unsubscribe(err, result, email, report);
       done();
     });
