@@ -50,6 +50,7 @@ var sns_client = SNSClient(auth, function (err, message) {
   var email = report.mail.destination[0];
   email = (email.indexOf("<") > -1) ? email.match(/<(.+)>/)[1] : email;
   if (!!email) {
+    // https://docs.aws.amazon.com/ses/latest/dg/notification-contents.html#bounce-types
     if (report.notificationType === 'Complaint' || report.bounce.bounceType == 'Permanent') {
       pg_pool.connect(function (err, client, done) {
         updatePanoptes(err, client, done, email, report);
