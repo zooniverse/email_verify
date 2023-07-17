@@ -8,7 +8,7 @@
     "pg": "8.11.x",
     "js-yaml": "4.1.x",
     "console-stamp": "3.1.x",
-    "winston": "3.9.x",
+    "winston": "3.10.x",
     "aws-snsclient": "0.2.x"
   },
   "scripts":{
