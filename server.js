@@ -52,9 +52,12 @@ var sns_client = SNSClient(auth, function (err, message) {
   if (!!email) {
     // https://docs.aws.amazon.com/ses/latest/dg/notification-contents.html#bounce-types
     if (report.notificationType === 'Complaint' || report.bounce.bounceType == 'Permanent') {
-      pg_pool.connect(function (err, client, done) {
-        updatePanoptes(err, client, done, email, report);
-      });
+      console.log("Unsubscribed " + email + "(" + report.notificationType + "); changed 0 rows");
+
+    // Temporarily pause db updates
+      // pg_pool.connect(function (err, client, done) {
+        // updatePanoptes(err, client, done, email, report);
+      // });
     } else {
       console.log("Ignoring non-permanent bounce for", email);
     }
@@ -67,7 +70,7 @@ var app = express();
 app.get('/', function (req, res) {
   res.status(200).end();
 });
-  
+
 
 app.post('/unsub', sns_client);
 
