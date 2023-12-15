@@ -54,7 +54,7 @@ var sns_client = SNSClient(auth, function (err, message) {
     if (report.notificationType === 'Complaint' || report.bounce.bounceType == 'Permanent') {
       console.log("Unsubscribed " + email + "(" + report.notificationType + "); changed 0 rows");
 
-      // Temporarily pause db updates
+    // Temporarily pause db updates
       // pg_pool.connect(function (err, client, done) {
         // updatePanoptes(err, client, done, email, report);
       // });
